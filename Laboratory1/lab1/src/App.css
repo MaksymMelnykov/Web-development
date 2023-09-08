@@ -1,0 +1,25 @@
+body {
+  background-color: #1c1c1c;
+}
+.Header {
+  text-align: center;
+  background-color: white;
+  padding: 1px;
+}
+.Button {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+.Input {
+  text-align: center;
+  padding: 1px;
+  margin-top: 30px;
+  color: white;
+  font-size: 20px;
+}
+.Image {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
