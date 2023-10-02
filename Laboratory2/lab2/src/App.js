@@ -16,26 +16,53 @@ export default class App extends Component {
         { id: 4, name: "Вода", selected: false },
         { id: 5, name: "Олія", selected: false },
       ],
+      isLoggedIn: false,
+      selectedProductsCount: 0,
     };
   }
 
   handleProductSelect = (productId) => {
     const updatedProducts = this.state.products.map((product) =>
-      product.id == productId
+      product.id === productId
         ? { ...product, selected: !product.selected }
         : product
     );
-    this.setState({ products: updatedProducts });
+    this.setState({ products: updatedProducts }, () => {
+      this.updatedSelectedProductsCount();
+    });
   };
+
+  handleLogin = () => {
+    this.setState({ isLoggedIn: true });
+  };
+
+  handleLogout = () => {
+    this.setState({ isLoggedIn: false });
+  };
+
+  updatedSelectedProductsCount = () => {
+    const selectedProductsCount = this.state.products.filter(
+      (product) => product.selected
+    ).length;
+    this.setState({ selectedProductsCount });
+  };
+
   render() {
+    const { products, isLoggedIn, selectedProductsCount } = this.state;
+
     return (
       <div className="container">
         <Header />
         <Body
-          products={this.state.products}
+          products={products}
           onProductSelect={this.handleProductSelect}
+          selectedProductsCount={selectedProductsCount}
         />
-        <Menu />
+        <Menu
+          isLoggedIn={isLoggedIn}
+          onLogin={this.handleLogin}
+          onLogout={this.handleLogout}
+        />
         <Footer />
       </div>
     );

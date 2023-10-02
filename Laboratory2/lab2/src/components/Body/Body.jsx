@@ -26,6 +26,7 @@ export default class Body extends Component{
             </ol>
             <div className="selected-products">
                 <h2>Вибрані товари: <span>{selectedProductsNames.join(", ")}</span></h2>
+                <h2>Кількість обраних товарів: <span>{this.props.selectedProductsCount}</span></h2> 
             </div>
         </div>
     );
