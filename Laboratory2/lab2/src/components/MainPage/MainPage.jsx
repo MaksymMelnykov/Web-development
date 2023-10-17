@@ -1,76 +1,94 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../Header/Header"
 import Footer from "../Footer/Footer";
 import Body from "../Body/Body";
 import Menu from "../Menu/Menu";
 import "../../App.css";
 
-export default class MainPage extends Component{
-    constructor() {
-        super();
-        this.state = {
-          products: [
-            { id: 1, name: "Хліб", price: 15, selected: false },
-            { id: 2, name: "М'ясо", price: 120, selected: false },
-            { id: 3, name: "Твердий сир", price: 50, selected: false },
-            { id: 4, name: "Вода", price: 25, selected: false },
-            { id: 5, name: "Олія", price: 30, selected: false },
-          ],
-          isLoggedIn: false,
-          selectedProductsCount: 0,
-          exchangeRate: 36.5,
-        };
-      }
+function useSelectedProductsCount(products, setSelectedProductsCount) {
+  useEffect(() => {
+    const selectedProductsCount = products.filter((product) => product.selected).length;
+    setSelectedProductsCount(selectedProductsCount);
+  }, [products, setSelectedProductsCount]);
+}
+
+function useLogging(data, dependencies) {
+  useEffect(() => {
+    dependencies.forEach((dependency, index) => {
+      console.log(dependency, data[index]);
+    });
+  }, data);
+}
+
+function useExchangeRate(setExchangeRate) {
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setExchangeRate(40);
+      console.log('The exchange rate has been changed to 40');
+    }, 30000);
+    return () => clearInterval(interval);
+  }, [setExchangeRate]);
+}
+
+export default function MainPage(){
+      const [products, setProducts] = useState([
+          { id: 1, name: "Хліб", price: 15, selected: false },
+          { id: 2, name: "М'ясо", price: 120, selected: false },
+          { id: 3, name: "Твердий сир", price: 50, selected: false },
+          { id: 4, name: "Вода", price: 25, selected: false },
+          { id: 5, name: "Олія", price: 30, selected: false },
+      ]);
+
+      const [isLoggedIn, setIsLoggedIn] = useState(false);
+      const [selectedProductsCount, setSelectedProductsCount] = useState(0);
+      const [exchangeRate, setExchangeRate] = useState(36.5);
     
-      handleProductSelect = (productId) => {
-        const updatedProducts = this.state.products.map((product) =>
+      const handleProductSelect = (productId) => {
+        const updatedProducts = products.map((product) =>
           product.id === productId
             ? { ...product, selected: !product.selected }
             : product
         );
-        this.setState({ products: updatedProducts }, () => {
-          this.updatedSelectedProductsCount();
-        });
+        setProducts(updatedProducts);
       };
     
-      handleLogin = () => {
-        this.setState({ isLoggedIn: true });
+      const handleLogin = () => {
+        setIsLoggedIn(true);
       };
     
-      handleLogout = () => {
-        this.setState({ isLoggedIn: false });
+      const handleLogout = () => {
+        setIsLoggedIn(false);
       };
     
-      updatedSelectedProductsCount = () => {
-        const selectedProductsCount = this.state.products.filter(
-          (product) => product.selected
-        ).length;
-        this.setState({ selectedProductsCount });
-      };
-    
-      convertToUSD = (priceInUAH) => {
-        const { exchangeRate } = this.state;
+      const convertToUSD = (priceInUAH) => {
         return (priceInUAH / exchangeRate).toFixed(2);
       };
 
-    render(){
-    const { products, isLoggedIn, selectedProductsCount } = this.state;
+      useSelectedProductsCount(products, setSelectedProductsCount);
+      
+      useLogging([products, isLoggedIn, selectedProductsCount], [
+        'Products: ',
+        'IsLoggedIn: ',
+        'SelectedProductsCount: ',
+      ]);
+
+      useExchangeRate(setExchangeRate);
+
     return(
-        <div className="container">
-            <Header />
-            <Body
-                products={products}
-                onProductSelect={this.handleProductSelect}
-                selectedProductsCount={selectedProductsCount}
-                convertToUSD={this.convertToUSD}
-            />
-            <Menu
-                isLoggedIn={isLoggedIn}
-                onLogin={this.handleLogin}
-                onLogout={this.handleLogout}
-            />
-            <Footer />
-          </div>
+      <div className="container">
+        <Header />
+        <Body
+            products={products}
+            onProductSelect={handleProductSelect}
+            selectedProductsCount={selectedProductsCount}
+            convertToUSD={convertToUSD}
+        />
+        <Menu
+            isLoggedIn={isLoggedIn}
+            onLogin={handleLogin}
+            onLogout={handleLogout}
+        />
+        <Footer />
+      </div>
     )
-    }
 }

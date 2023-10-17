@@ -9,7 +9,8 @@ export default class Body extends Component{
           showInUSD: false, 
         };
       }
-    getSelectedProducts() {
+
+      getSelectedProducts() {
         return this.props.products.filter((product) => product.selected);
       }
       convertToUSD = (priceInUAH) => {
@@ -23,6 +24,7 @@ export default class Body extends Component{
           showInUSD: !prevState.showInUSD,
         }));
       };
+      
     render(){
         const selectedProducts = this.getSelectedProducts();
         const selectedProductsNames = selectedProducts.map((product) => product.name);
