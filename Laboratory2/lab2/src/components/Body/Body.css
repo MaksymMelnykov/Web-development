@@ -6,8 +6,18 @@
   grid-area: b;
 }
 
+.bodyContent {
+  display: flex;
+  align-items: center;
+  margin: 10px;
+}
+
 .body ol {
   font-size: 20px;
+}
+
+label {
+  margin-right: 20px;
 }
 
 .selected-products span {
@@ -20,7 +30,7 @@
   justify-content: space-around;
 }
 
-button {
+body button {
   width: 140px;
   height: 45px;
   background-color: darkcyan;
@@ -32,12 +42,12 @@ button {
   transition: all ease-in-out;
 }
 
-button:hover {
+body button:hover {
   box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
   transform: translateY(-2px);
 }
 
-button:active {
+body button:active {
   box-shadow: none;
   transform: translateY(0);
 }

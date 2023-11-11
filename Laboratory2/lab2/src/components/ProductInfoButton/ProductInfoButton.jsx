@@ -1,13 +1,12 @@
-import React, { Component } from "react";
+import React from "react";
+import { Link } from "react-router-dom";
 
-export default class ProductInfoButton extends Component{
-    onClickPage(){
-        window.location.assign('http://localhost:3000/productInfo/')
-    }
+export default function ProductInfoButton({ idx, name }) {
+  const path = `/productInfo/${idx}`;
 
-    render(){
-        return (
-            <button onClick={(e) => this.onClickPage(e)}>Детальний опис товару</button>
-        )
-    }
+  return (
+    <Link to={path}>
+      <button>Детальний опис товару {name}</button>
+    </Link>
+  );
 }

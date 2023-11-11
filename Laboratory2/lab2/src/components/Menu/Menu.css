@@ -12,3 +12,13 @@
 .button {
   margin-top: 10px;
 }
+
+.category-links {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  margin: 15px 0;
+  gap: 1em;
+}
