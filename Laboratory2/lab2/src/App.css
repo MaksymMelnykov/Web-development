@@ -12,4 +12,27 @@
     "h h h"
     "m b b"
     "f f f";
+  background: #33cccc;
+  animation: color 9s infinite linear;
+}
+
+@keyframes color {
+  0% {
+    background: #33cccc;
+  }
+  20% {
+    background: #33cc36;
+  }
+  40% {
+    background: #b8cc33;
+  }
+  60% {
+    background: #fcca00;
+  }
+  80% {
+    background: #33cc36;
+  }
+  100% {
+    background: #33cccc;
+  }
 }

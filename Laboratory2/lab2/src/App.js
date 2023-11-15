@@ -1,3 +1,4 @@
+import AdminPage from "./components/AdminPage/AdminPage";
 import Debug from "./components/Debug/Debug";
 import MainPage from "./components/MainPage/MainPage";
 import NavigationHistory from "./components/NavigationHistory/NavigationHistory";
@@ -24,6 +25,7 @@ export default function App() {
           <Route path="/" element={<MainPage />}></Route>
           <Route path={`/productInfo/:idx`} element={<ProductInfo />} />
           <Route path="/debug" element={<Debug />}></Route>
+          <Route path="/admin" element={<AdminPage />}></Route>
         </Routes>
       </NavigationHistory>
     </Router>

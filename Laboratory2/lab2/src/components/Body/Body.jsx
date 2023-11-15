@@ -1,9 +1,19 @@
 import React, { useState } from "react";
-import "./Body.css";
+import styles from "./Body.module.css";
 import ProductInfoButton from "../ProductInfoButton/ProductInfoButton";
+import { CSSTransition } from "react-transition-group";
 
 const Body = (props) => {
   const [showInUSD, setShowInUSD] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const openDialog = () => {
+    setIsDialogOpen(true);
+  };
+
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+  };
 
   const getSelectedProducts = () => {
     return props.products.filter((product) => product.selected);
@@ -26,36 +36,39 @@ const Body = (props) => {
   const currencyButtonText = showInUSD ? "Ціна в гривнях" : "Ціна в доларах";
 
   return (
-    <div className="body">
+    <div className={styles.body}>
       <h2>Тіло</h2>
       <h2>Список товарів</h2>
-      <ol>
-        {props.products.map((product, idx) => (
-          <>
-            <li key={product.id}>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={product.selected}
-                  onChange={() => props.onProductSelect(product.id)}
-                />
-                {product.name}, ціна:{" "}
-                {showInUSD
-                  ? convertToUSD(product.price) + " USD"
-                  : product.price + " грн"}{" "}
-                од/кг.
-              </label>
-              <span className="bodyContent">
-                <ProductInfoButton
-                  idx={idx}
-                  name={product.name}
-                ></ProductInfoButton>
-              </span>
-            </li>
-          </>
-        ))}
-      </ol>
-      <div className="selected-products">
+      <div className={styles.goods}>
+        <ol>
+          {props.products.map((product, idx) => (
+            <>
+              <li key={product.id}>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={product.selected}
+                    onChange={() => props.onProductSelect(product.id)}
+                  />
+                  {product.name}, ціна:{" "}
+                  {showInUSD
+                    ? convertToUSD(product.price) + " USD"
+                    : product.price + " грн"}{" "}
+                  од/кг.
+                </label>
+                <span className={styles.bodyContent}>
+                  <ProductInfoButton
+                    idx={idx}
+                    name={product.name}
+                  ></ProductInfoButton>
+                </span>
+              </li>
+            </>
+          ))}
+        </ol>
+      </div>
+
+      <div className={styles.selected_products}>
         <h2>
           Вибрані товари: <span>{selectedProductsNames.join(", ")}</span>
         </h2>
@@ -63,8 +76,27 @@ const Body = (props) => {
           Кількість обраних товарів: <span>{props.selectedProductsCount}</span>
         </h2>
       </div>
-      <div className="productInfo-currency">
+      <div className={styles.productInfo_currency}>
         <button onClick={toggleCurrencyDisplay}>{currencyButtonText}</button>
+      </div>
+      <div className={styles.dialog_gallery}>
+        <button onClick={openDialog}>Діалогове вікно</button>
+        <CSSTransition
+          in={isDialogOpen}
+          timeout={500}
+          classNames={styles.dialog}
+          unmountOnExit
+          mountOnEnter
+        >
+          <div className={styles.dialog}>
+            <h2>Важливе повідомлення</h2>
+            <p>
+              Дякуємо за використання нашого веб-сайту. Ми маємо важливе
+              повідомлення для вас...
+            </p>
+            <button onClick={closeDialog}>Закрити</button>
+          </div>
+        </CSSTransition>
       </div>
     </div>
   );

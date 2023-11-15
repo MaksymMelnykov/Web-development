@@ -1,30 +1,31 @@
-import "./Menu.css";
+import styles from "./Menu.module.css";
 import LoginButton from "../LoginButton/LoginButton";
 import LogoutButton from "../LogoutButton/LogoutButton";
 import { Link } from "react-router-dom";
-import { useState } from "react";
-import Debug from "../Debug/Debug";
 
 export default function Menu({ isLoggedIn, onLogin, onLogout }) {
+  const AuthMessage = ({ isLoggedIn }) => (
+    <div>
+      <span className={styles.authText}>
+        {isLoggedIn
+          ? "Ви увійшли в систему!"
+          : "Будь ласка, увійдіть в систему!"}
+      </span>
+      <div className={styles.button}>
+        {isLoggedIn ? (
+          <LogoutButton onLogout={onLogout} />
+        ) : (
+          <LoginButton onLogin={onLogin} />
+        )}
+      </div>
+    </div>
+  );
+
   return (
-    <div className="menu">
+    <div className={styles.menu}>
       <h2>Меню</h2>
-      {isLoggedIn ? (
-        <div>
-          <span className="authText">Ви увійшли в систему!</span>
-          <div className="button">
-            <LogoutButton onLogout={onLogout} />
-          </div>
-        </div>
-      ) : (
-        <div>
-          <span className="authText">Будь ласка, увійдіть в систему!</span>
-          <div className="button">
-            <LoginButton onLogin={onLogin} />
-          </div>
-        </div>
-      )}
-      <div className="category-links">
+      <AuthMessage isLoggedIn={isLoggedIn} />
+      <div className={styles.category_links}>
         <Link to="/">
           <button>Main Page</button>
         </Link>

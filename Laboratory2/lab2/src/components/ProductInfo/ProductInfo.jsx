@@ -1,7 +1,6 @@
 import React, { useContext, createContext } from "react";
 import { useParams } from "react-router-dom";
 import { DataContext } from "../../App";
-import "./ProductInfo.css";
 import ProductsPage from "../ProductsPage/ProductsPage";
 
 export const ProductInfoData = createContext(null);
