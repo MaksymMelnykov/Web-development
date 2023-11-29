@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "./LoginButton.module.css";
-import { Modal, Button, Form, Input } from "antd";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { Modal } from "antd";
+import LoginForm from "../LoginForm/LoginForm";
 
 export default function LoginButton({ onLogin }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -23,7 +23,6 @@ export default function LoginButton({ onLogin }) {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
-
   return (
     <>
       <button onClick={showModal} className={styles.loginButton}>
@@ -31,50 +30,17 @@ export default function LoginButton({ onLogin }) {
       </button>
       <Modal
         title="Авторизація"
-        open={isModalVisible}
+        visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
         centered
-        footer={[
-          <Button key="back" onClick={handleCancel}>
-            Відмінити
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={isLoading}
-            onClick={handleOk}
-          >
-            Увійти
-          </Button>,
-        ]}
+        footer={null}
       >
-        <Form>
-          <Form.Item
-            label="Логін"
-            name="username"
-            rules={[
-              {
-                required: true,
-                message: "Будь ласка, введіть ім'я користувача!",
-              },
-            ]}
-          >
-            <Input prefix={<UserOutlined />} />
-          </Form.Item>
-          <Form.Item
-            label="Пароль"
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: "Будь ласка, введіть пароль!",
-              },
-            ]}
-          >
-            <Input.Password prefix={<LockOutlined />} />
-          </Form.Item>
-        </Form>
+        <LoginForm
+          onLogin={handleOk}
+          onCancel={handleCancel}
+          isLoading={isLoading}
+        />
       </Modal>
     </>
   );

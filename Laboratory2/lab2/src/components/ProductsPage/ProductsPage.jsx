@@ -2,31 +2,25 @@ import React, { useContext, useState } from "react";
 import { ProductInfoData } from "../ProductInfo/ProductInfo";
 import styles from "../ProductInfo/ProductInfo.module.css";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
+import AddCommentForm from "../AddCommentForm/AddCommentForm";
+import { ErrorMessage, Formik } from "formik";
 
 const ProductsPage = () => {
   const [comments, setComments] = useState([]);
-  const [comment, setComment] = useState("");
+  const { id, name, description } = useContext(ProductInfoData);
 
-  const handleCommentChange = (e) => {
-    setComment(e.target.value);
-  };
-
-  const handleSubmitComment = (e) => {
-    e.preventDefault();
-    if (comment.trim() === "") {
+  const handleSubmitComment = (values, { resetForm }) => {
+    if (values.comment.trim() === "") {
       alert("Введіть коментар!");
       return;
     }
-
-    const newComment = `${comment}. ${new Date().toLocaleString()}`;
+    const newComment = `${values.comment}. ${new Date().toLocaleString()}`;
     console.log("Ваш відгук: ", newComment);
     alert(`Ваш відгук: "${newComment}" додано успішно!`);
 
     setComments([...comments, newComment]);
-    setComment("");
+    resetForm();
   };
-
-  const { id, name, description } = useContext(ProductInfoData);
 
   return (
     <div className={styles.product_info}>
@@ -38,17 +32,14 @@ const ProductsPage = () => {
           <p>{description}</p>
         </div>
         <div className={styles.form_comments}>
-          <form onSubmit={handleSubmitComment}>
-            <div>
-              <h3>Додати коментар:</h3>
-              <textarea
-                value={comment}
-                onChange={handleCommentChange}
-                placeholder="Напишіть свій коментар"
-              />
-            </div>
-            <button type="submit">Додати коментар</button>
-          </form>
+          <Formik
+            initialValues={{ comment: "" }}
+            onSubmit={handleSubmitComment}
+          >
+            {({ handleSubmit }) => (
+              <AddCommentForm handleSubmit={handleSubmit} />
+            )}
+          </Formik>
         </div>
         <div className={styles.comments}>
           <h3>Коментарі:</h3>

@@ -3,8 +3,9 @@ import Debug from "./components/Debug/Debug";
 import MainPage from "./components/MainPage/MainPage";
 import NavigationHistory from "./components/NavigationHistory/NavigationHistory";
 import ProductInfo from "./components/ProductInfo/ProductInfo";
-import { createContext } from "react";
+import { createContext, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import RegistrationForm from "./components/RegistrationForm/RegistrationForm";
 
 const products = [
   { id: 1, name: "Хліб", price: 15, selected: false },
@@ -26,6 +27,7 @@ export default function App() {
           <Route path={`/productInfo/:idx`} element={<ProductInfo />} />
           <Route path="/debug" element={<Debug />}></Route>
           <Route path="/admin" element={<AdminPage />}></Route>
+          <Route path="/register" element={<RegistrationForm />}></Route>
         </Routes>
       </NavigationHistory>
     </Router>

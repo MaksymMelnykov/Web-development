@@ -26,6 +26,9 @@ export default function Menu({ isLoggedIn, onLogin, onLogout }) {
       <h2>Меню</h2>
       <AuthMessage isLoggedIn={isLoggedIn} />
       <div className={styles.category_links}>
+        <Link to="/register">
+          <button>Register</button>
+        </Link>
         <Link to="/">
           <button>Main Page</button>
         </Link>

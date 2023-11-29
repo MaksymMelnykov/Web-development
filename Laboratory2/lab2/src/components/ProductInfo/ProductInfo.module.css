@@ -113,7 +113,6 @@
   border-color: #1c1c1c;
   border-width: 3px;
   font-size: 18px;
-  margin-bottom: 10px;
 }
 
 .form_comments textarea:focus {
@@ -122,6 +121,7 @@
 
 button {
   font-size: 14px;
+  margin-top: 10px;
 }
 
 .fade-enter {

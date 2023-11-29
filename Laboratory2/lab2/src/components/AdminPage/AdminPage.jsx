@@ -9,6 +9,7 @@ import {
   Statistic,
   Flex,
   Typography,
+  Popover,
 } from "antd";
 import {
   DesktopOutlined,
@@ -76,15 +77,17 @@ class AdminPage extends React.Component {
               style={{ padding: 24, minHeight: 360 }}
             >
               <Flex wrap="wrap" gap={10}>
-                <Card
-                  title="Карточка користувача"
-                  extra={<a href="#">Більше</a>}
-                  style={{ width: 300 }}
-                >
-                  <p>Контент картки</p>
-                  <p>Контент картки</p>
-                  <p>Контент картки</p>
-                </Card>
+                <Popover title="User card">
+                  <Card
+                    title="Карточка користувача"
+                    extra={<a href="#">Більше</a>}
+                    style={{ width: 300 }}
+                  >
+                    <p>Контент картки</p>
+                    <p>Контент картки</p>
+                    <p>Контент картки</p>
+                  </Card>
+                </Popover>
                 <Card
                   title="Карточка користувача"
                   extra={<a href="#">Більше</a>}

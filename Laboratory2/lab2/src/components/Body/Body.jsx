@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styles from "./Body.module.css";
 import ProductInfoButton from "../ProductInfoButton/ProductInfoButton";
 import { CSSTransition } from "react-transition-group";
+import AddProductForm from "../AddProductForm/AddProductForm";
+import { DataContext } from "../../App";
+import { ProductInfoData } from "../ProductInfo/ProductInfo";
 
 const Body = (props) => {
   const [showInUSD, setShowInUSD] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const products = useContext(DataContext);
 
   const openDialog = () => {
     setIsDialogOpen(true);
@@ -34,6 +38,19 @@ const Body = (props) => {
   const selectedProductsNames = selectedProducts.map((product) => product.name);
 
   const currencyButtonText = showInUSD ? "Ціна в гривнях" : "Ціна в доларах";
+
+  const handleAddProduct = (values, { resetForm }) => {
+    const newProduct = {
+      id: products,
+      name: values.name,
+      price: parseFloat(values.price),
+      selected: false,
+    };
+
+    props.setProducts([...props.products, newProduct]);
+
+    resetForm();
+  };
 
   return (
     <div className={styles.body}>
@@ -89,11 +106,8 @@ const Body = (props) => {
           mountOnEnter
         >
           <div className={styles.dialog}>
-            <h2>Важливе повідомлення</h2>
-            <p>
-              Дякуємо за використання нашого веб-сайту. Ми маємо важливе
-              повідомлення для вас...
-            </p>
+            <h2>Додати товар</h2>
+            <AddProductForm handleSubmit={handleAddProduct} />
             <button onClick={closeDialog}>Закрити</button>
           </div>
         </CSSTransition>

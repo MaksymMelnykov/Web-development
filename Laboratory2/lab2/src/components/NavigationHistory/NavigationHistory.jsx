@@ -8,14 +8,14 @@ function NavigationHistory({ children }) {
   const [history, setHistory] = useState([]);
 
   useEffect(() => {
-    setHistory((prevHistory) => {
+    setHistory((previousHistory) => {
       const newPath = location.pathname;
 
-      if (newPath !== prevHistory[prevHistory.length - 1]) {
-        return [...prevHistory, newPath];
+      if (newPath !== previousHistory[previousHistory.length - 1]) {
+        return [...previousHistory, newPath];
       }
 
-      return prevHistory;
+      return previousHistory;
     });
   }, [location]);
 

@@ -80,6 +80,7 @@ export default function MainPage() {
           onProductSelect={handleProductSelect}
           selectedProductsCount={selectedProductsCount}
           convertToUSD={convertToUSD}
+          setProducts={setProducts}
         />
         <Menu
           isLoggedIn={isLoggedIn}
