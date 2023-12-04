@@ -10,6 +10,7 @@
 .bodyContent {
   display: flex;
   align-items: center;
+  justify-content: center;
   margin: 15px;
 }
 
@@ -26,6 +27,9 @@
 
 label {
   margin-right: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .selected_products span {
@@ -111,4 +115,19 @@ input[type="checkbox"] {
 
 .dialog h2 {
   margin-bottom: 10px;
+}
+
+.delete {
+  height: 30px;
+  width: 30px;
+  margin-left: 10px;
+}
+
+.delete:hover {
+  transform: translateY(-4px);
+}
+
+.delete:active {
+  box-shadow: none;
+  transform: translateY(0);
 }

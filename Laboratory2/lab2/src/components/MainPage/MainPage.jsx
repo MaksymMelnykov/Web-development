@@ -4,7 +4,7 @@ import Footer from "../Footer/Footer";
 import Body from "../Body/Body";
 import Menu from "../Menu/Menu";
 import "../../App.css";
-import { DataContext } from "../../App";
+import { useSelector } from "react-redux";
 
 function useSelectedProductsCount(products, setSelectedProductsCount) {
   useEffect(() => {
@@ -34,7 +34,7 @@ function useExchangeRate(setExchangeRate) {
 }
 
 export default function MainPage() {
-  const productsData = useContext(DataContext);
+  const productsData = useSelector((state) => state.products);
   const [products, setProducts] = useState(productsData);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -72,23 +72,21 @@ export default function MainPage() {
   useExchangeRate(setExchangeRate);
 
   return (
-    <DataContext.Provider>
-      <div className="container">
-        <Header />
-        <Body
-          products={products}
-          onProductSelect={handleProductSelect}
-          selectedProductsCount={selectedProductsCount}
-          convertToUSD={convertToUSD}
-          setProducts={setProducts}
-        />
-        <Menu
-          isLoggedIn={isLoggedIn}
-          onLogin={handleLogin}
-          onLogout={handleLogout}
-        />
-        <Footer />
-      </div>
-    </DataContext.Provider>
+    <div className="container">
+      <Header />
+      <Body
+        products={products}
+        onProductSelect={handleProductSelect}
+        selectedProductsCount={selectedProductsCount}
+        convertToUSD={convertToUSD}
+        setProducts={setProducts}
+      />
+      <Menu
+        isLoggedIn={isLoggedIn}
+        onLogin={handleLogin}
+        onLogout={handleLogout}
+      />
+      <Footer />
+    </div>
   );
 }

@@ -3,13 +3,20 @@ import styles from "./Body.module.css";
 import ProductInfoButton from "../ProductInfoButton/ProductInfoButton";
 import { CSSTransition } from "react-transition-group";
 import AddProductForm from "../AddProductForm/AddProductForm";
-import { DataContext } from "../../App";
-import { ProductInfoData } from "../ProductInfo/ProductInfo";
+import { useDispatch, useSelector } from "react-redux";
+import store from "../../store";
+import { addProduct, deleteProduct, sortProductsByName } from "../../actions";
+import { Popover, message } from "antd";
 
-const Body = (props) => {
+const Body = ({
+  products,
+  onProductSelect,
+  selectedProductsCount,
+  convertToUSD,
+  setProducts,
+}) => {
   const [showInUSD, setShowInUSD] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const products = useContext(DataContext);
 
   const openDialog = () => {
     setIsDialogOpen(true);
@@ -20,12 +27,12 @@ const Body = (props) => {
   };
 
   const getSelectedProducts = () => {
-    return props.products.filter((product) => product.selected);
+    return products.filter((product) => product.selected);
   };
 
-  const convertToUSD = (priceInUAH) => {
-    if (props.convertToUSD) {
-      return props.convertToUSD(priceInUAH);
+  const convertUSD = (priceInUAH) => {
+    if (convertToUSD) {
+      return convertToUSD(priceInUAH);
     }
     return priceInUAH;
   };
@@ -39,6 +46,10 @@ const Body = (props) => {
 
   const currencyButtonText = showInUSD ? "Ціна в гривнях" : "Ціна в доларах";
 
+  const dispatch = useDispatch();
+
+  console.log(store);
+
   const handleAddProduct = (values, { resetForm }) => {
     const newProduct = {
       id: products,
@@ -46,10 +57,20 @@ const Body = (props) => {
       price: parseFloat(values.price),
       selected: false,
     };
-
-    props.setProducts([...props.products, newProduct]);
+    dispatch(addProduct(newProduct));
+    message.success(`Продукт ${newProduct.name} успішно додано!`);
+    console.log(store);
 
     resetForm();
+  };
+
+  const handleDeleteProduct = (productId) => {
+    dispatch(deleteProduct(productId));
+    message.success(`Продукт ${productId.name} видалено успішно!`);
+  };
+
+  const handleSortProductsByName = () => {
+    dispatch(sortProductsByName());
   };
 
   return (
@@ -58,18 +79,18 @@ const Body = (props) => {
       <h2>Список товарів</h2>
       <div className={styles.goods}>
         <ol>
-          {props.products.map((product, idx) => (
+          {products.map((product, idx) => (
             <>
               <li key={product.id}>
                 <label>
                   <input
                     type="checkbox"
                     checked={product.selected}
-                    onChange={() => props.onProductSelect(product.id)}
+                    onChange={() => onProductSelect(product.id)}
                   />
                   {product.name}, ціна:{" "}
                   {showInUSD
-                    ? convertToUSD(product.price) + " USD"
+                    ? convertUSD(product.price) + " USD"
                     : product.price + " грн"}{" "}
                   од/кг.
                 </label>
@@ -78,6 +99,17 @@ const Body = (props) => {
                     idx={idx}
                     name={product.name}
                   ></ProductInfoButton>
+                  <Popover
+                    title="Information"
+                    content={"Видалити продукт " + product.name + "?"}
+                  >
+                    <img
+                      className={styles.delete}
+                      src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Cross_red_circle.svg/800px-Cross_red_circle.svg.png"
+                      alt="Delete product"
+                      onClick={() => handleDeleteProduct(product)}
+                    />
+                  </Popover>
                 </span>
               </li>
             </>
@@ -90,11 +122,12 @@ const Body = (props) => {
           Вибрані товари: <span>{selectedProductsNames.join(", ")}</span>
         </h2>
         <h2>
-          Кількість обраних товарів: <span>{props.selectedProductsCount}</span>
+          Кількість обраних товарів: <span>{selectedProductsCount}</span>
         </h2>
       </div>
       <div className={styles.productInfo_currency}>
         <button onClick={toggleCurrencyDisplay}>{currencyButtonText}</button>
+        <button onClick={handleSortProductsByName}>Сортувати за ім'ям</button>
       </div>
       <div className={styles.dialog_gallery}>
         <button onClick={openDialog}>Діалогове вікно</button>

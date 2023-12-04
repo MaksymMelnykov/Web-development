@@ -1,19 +1,36 @@
-import React, { useContext, useState } from "react";
-import { ProductInfoData } from "../ProductInfo/ProductInfo";
+import React, { useContext, useEffect, useState } from "react";
+// import { ProductInfoData } from "../ProductInfo/ProductInfo";
 import styles from "../ProductInfo/ProductInfo.module.css";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import AddCommentForm from "../AddCommentForm/AddCommentForm";
-import { ErrorMessage, Formik } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 
-const ProductsPage = () => {
+const validationSchema = Yup.object().shape({
+  comment: Yup.string()
+    .min(10, "Мінімальна кількість символів - 10")
+    .required("Обов'язково для заповнення"),
+});
+
+const MyTextArea = ({ field, form, ...props }) => {
+  return <textarea {...field} {...props} />;
+};
+
+const MyButton = ({ children, ...props }) => {
+  return <button {...props}>{children}</button>;
+};
+
+const ProductsPage = ({ product }) => {
   const [comments, setComments] = useState([]);
-  const { id, name, description } = useContext(ProductInfoData);
+  const [data, setData] = useState();
+
+  useEffect(() => {
+    if (product) {
+      setData(product);
+    }
+  }, [product]);
+  // const { id, name, description } = useContext(ProductInfoData);
 
   const handleSubmitComment = (values, { resetForm }) => {
-    if (values.comment.trim() === "") {
-      alert("Введіть коментар!");
-      return;
-    }
     const newComment = `${values.comment}. ${new Date().toLocaleString()}`;
     console.log("Ваш відгук: ", newComment);
     alert(`Ваш відгук: "${newComment}" додано успішно!`);
@@ -27,18 +44,32 @@ const ProductsPage = () => {
       <div className={styles.wrapper_good}>
         <div className={styles.about_good}>
           <h2>
-            Товар: {name} (ID: {id})
+            Товар: {data?.name} (ID: {data?.id})
           </h2>
-          <p>{description}</p>
+          <p>{data?.description}</p>
         </div>
         <div className={styles.form_comments}>
           <Formik
             initialValues={{ comment: "" }}
             onSubmit={handleSubmitComment}
+            validationSchema={validationSchema}
           >
-            {({ handleSubmit }) => (
-              <AddCommentForm handleSubmit={handleSubmit} />
-            )}
+            <Form>
+              <div>
+                <h3>Додати коментар:</h3>
+                <Field
+                  component={MyTextArea}
+                  name="comment"
+                  placeholder="Напишіть свій коментар"
+                />
+                <ErrorMessage
+                  name="comment"
+                  component="div"
+                  style={{ color: "red" }}
+                />
+              </div>
+              <MyButton type="submit">Додати коментар</MyButton>
+            </Form>
           </Formik>
         </div>
         <div className={styles.comments}>
